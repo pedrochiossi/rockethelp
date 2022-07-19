@@ -1,4 +1,5 @@
-import { HStack, Text, useTheme, Box, VStack, Circle, Pressable, IPressableProps } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { HStack, Text, useTheme, Box, VStack, Circle, Pressable } from 'native-base';
 import { ClockAfternoon, CircleWavyCheck, Hourglass } from 'phosphor-react-native';
 
 export type OrderProps = {
@@ -8,13 +9,17 @@ export type OrderProps = {
   status: 'open' | 'closed'
 }
 
-type Props = IPressableProps & {
+interface Props {
   data: OrderProps;
 }
 
 export function Order({ data, ...rest } : Props) {
-
+  const { navigate } = useNavigation();
   const { colors } = useTheme();
+
+  function handleOpenDetails(orderId: string) {
+    navigate('details', { orderId })
+  }
 
   const colorsMap = {
     open: colors.secondary[700],
@@ -27,7 +32,7 @@ export function Order({ data, ...rest } : Props) {
   } 
 
   return (
-    <Pressable { ...rest }>
+    <Pressable onPress={() => handleOpenDetails(data.id)}>
       <HStack
         bg="gray.600"
         mb={4}
