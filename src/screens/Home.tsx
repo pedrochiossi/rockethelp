@@ -6,6 +6,7 @@ import { Filter } from '../components/Filter';
 import { Order, OrderProps } from '../components/Order';
 import { EmptyOrders } from '../components/EmptyOrders';
 import { Button } from '../components/Button';
+import { useNavigation } from '@react-navigation/native';
 
 export function Home() {
 
@@ -19,6 +20,11 @@ export function Home() {
     }
   ]);
   const { colors } = useTheme();
+  const { navigate } = useNavigation();
+
+  function handleNewOrder() {
+    navigate('new');
+  }
 
   return (
     <VStack flex={1} pb={6} bg="gray.700">
@@ -58,14 +64,14 @@ export function Home() {
           />
         </HStack>
         <FlatList
-          data={orders}
+          data={orders.filter(order => order.status === selectedStatus)}
           keyExtractor={order => order.id}
           renderItem={({ item }) => <Order data={item} />}
           ListEmptyComponent={() => <EmptyOrders selectedStatus={selectedStatus} />}
           contentContainerStyle={{ paddingBottom: 100 }}
         >
         </FlatList>
-        <Button title='Nova solicitação' /> 
+        <Button title='Nova solicitação' onPress={handleNewOrder} /> 
       </VStack>
     </VStack> 
   );
